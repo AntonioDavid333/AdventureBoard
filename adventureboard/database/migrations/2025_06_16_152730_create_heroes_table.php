@@ -17,8 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('faction_id')->nullable();
             $table->string('image_uri')->nullable();
             $table->string('name',200);
-            $table->unsignedBigInteger('classrole_id')->default(0);
-            $table->unsignedBigInteger('race_id')->default(0);
+            $table->unsignedBigInteger('classrole_id')->default(1);
+            $table->unsignedBigInteger('race_id')->default(1);
             $table->unsignedBigInteger('ph')->default(100);
             $table->unsignedBigInteger('strength')->default(30);
             $table->unsignedBigInteger('defense')->default(20);
