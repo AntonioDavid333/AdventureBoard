@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Heroe extends Model
+{
+    protected $guarded = [];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+
+    }
+
+    public function quests()
+    {
+        return $this->belongsToMany(Quest::class);
+    }
+
+    public function race()
+    {
+        return $this->belongsTo(Race::class);
+    }
+
+    public function classrole()
+    {
+        return $this->belongsTo(Classrole::class);
+    }
+
+    public function faction()
+    {
+        return $this->belongsTo(Faction::class);
+    }
+
+    public function equipments()
+    {
+        return $this->hasMany(Equipment::class);
+    }
+}
