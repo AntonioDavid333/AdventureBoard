@@ -1,24 +1,21 @@
 <?php
 
-use Illuminate\Foundation\Application;
+
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HeroeController;
+use App\Http\Controllers\QuestController;
+use App\Http\Controllers\WeaponController;
+use App\Http\Controllers\PurchaseController;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+Route::get('/', [DashboardController::class, 'index']);
+
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    Route::resource('/heroes', HeroeController::class);
+    Route::resource('/quests', QuestController::class);
+    Route::resource('/weapons', WeaponController::class);
+    Route::post('/weapons/{weapon}/buy', [WeaponController::class, 'buy']);
+    Route::resource('/purchases', PurchaseController::class);
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-});

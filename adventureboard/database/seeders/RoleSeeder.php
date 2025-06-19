@@ -24,8 +24,8 @@ class RoleSeeder extends Seeder
 
         $permission_create_faction = Permission::create(['name' => 'create_factions']);
         $permission_read_faction = Permission::create(['name' => 'read_factions']);
-        $permission_update_faction = Permission::create(['name' => 'update_faction']);
-        $permission_delete_faction = Permission::create(['name' => 'delete_faction']);
+        $permission_update_faction = Permission::create(['name' => 'update_factions']);
+        $permission_delete_faction = Permission::create(['name' => 'delete_factions']);
 
         $permission_create_classrole = Permission::create(['name' => 'create_classroles']);
         $permission_read_classrole = Permission::create(['name' => 'read_classroles']);
@@ -55,6 +55,10 @@ class RoleSeeder extends Seeder
             $permission_read_classrole,
             $permission_update_classrole,
             $permission_delete_classrole,
+            $permission_create_race,
+            $permission_read_race,
+            $permission_update_race,
+            $permission_delete_race,
             $permission_create_weapon,
             $permission_read_weapon,
             $permission_update_weapon,
@@ -70,6 +74,10 @@ class RoleSeeder extends Seeder
             $permission_read_classrole,
             $permission_update_classrole,
             $permission_delete_classrole,
+            $permission_create_race,
+            $permission_read_race,
+            $permission_update_race,
+            $permission_delete_race,
             $permission_create_weapon,
             $permission_read_weapon,
             $permission_update_weapon,
