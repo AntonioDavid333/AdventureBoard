@@ -36,34 +36,45 @@ defineEmits(['submit'])
             {{ updating ? 'Updates the selected weapon.' : 'Creates new weapon for purchasing' }}
         </template>
         <template #form>
-           <div class="flex flex-col flex-1 gap-4 w-full justify-between">
+           <div class="col-span-6 sm:col-span-6">
                 <!-- Repetible para cada campo -->
-                <div class="flex justify-between items-center gap-4 w-full">
+                <div class="flex justify-between items-center gap-4 w-full pt-4 pb-2">
                 <InputLabel for="name" value="Name" class="w-32 shrink-0" />
                 <TextInput id="name" v-model="form.name" type="text" autocomplete="name" class="flex-1" />
+                <InputError :message="$page.props.errors.name" class="mt-2"></InputError>
                 </div>
 
-                <div class="flex items-center gap-4 w-full">
+                <div class="flex items-center gap-4 w-full pt-4 pb-2">
                 <InputLabel for="description" value="Description" class="w-32 shrink-0" />
-                <TextInput id="description" v-model="form.description" type="text" autocomplete="description" class="flex-1" />
+                <textarea id="description" v-model="form.description" type="text" autocomplete="description" class="flex-1 border border-gray-300 rounded-md"></textarea>
                 </div>
 
-                <div class="flex items-center gap-4 w-full">
+                <div class="flex items-center gap-4 w-full pt-4 pb-2">
+                <InputLabel for="image_uri" value="image_uri" class="w-32 shrink-0" />
+                <TextInput id="image_uri" v-model="form.image_uri" type="text" autocomplete="image_uri" class="flex-1" />
+                </div>
+
+                <div class="flex items-center gap-4 w-full pt-4 pb-2">
                 <InputLabel for="price" value="Price" class="w-32 shrink-0" />
-                <TextInput id="price" v-model="form.price" type="text" autocomplete="price" class="flex-1" />
+                <TextInput id="price" v-model="form.price" type="number" autocomplete="price" class="flex-1" />
                 </div>
 
-                <div class="flex items-center gap-4 w-full">
+                <div class="flex items-center gap-4 w-full pt-4 pb-2">
                 <InputLabel for="damage" value="Damage" class="w-32 shrink-0" />
-                <TextInput id="damage" v-model="form.damage" type="text" autocomplete="damage" class="flex-1" />
+                <TextInput id="damage" v-model="form.damage" type="number" autocomplete="damage" class="flex-1" />
                 </div>
 
-                <div class="flex items-center gap-4 w-full">
+                <div class="flex items-center gap-4 w-full pt-4 pb-2">
                 <InputLabel for="defense" value="Defense" class="w-32 shrink-0" />
-                <TextInput id="defense" v-model="form.defense" type="text" autocomplete="defense" class="flex-1" />
+                <TextInput id="defense" v-model="form.defense" type="number" autocomplete="defense" class="flex-1" />
                 </div>
             </div> 
 
+        </template>
+        <template #actions>
+            <PrimaryButton>
+                {{ updating? 'Update' : 'Create' }}
+            </PrimaryButton>
         </template>
     </FormSection>
 </template>

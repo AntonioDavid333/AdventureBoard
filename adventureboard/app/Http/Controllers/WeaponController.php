@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Weapon;
+use App\Http\Requests\WeaponRequest;
 
 class WeaponController extends Controller
 {
@@ -50,10 +51,14 @@ class WeaponController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * /
+     * @param App\Http\Requests\WeaponRequest
+     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(WeaponRequest $request)
     {
-        //
+        Weapon::create($request->validated());
+        return redirect()->route('weapons.index');
     }
 
     /**

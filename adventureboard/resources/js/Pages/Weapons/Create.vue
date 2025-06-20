@@ -11,7 +11,12 @@ import WeaponForm from '@/Components/Weapons/Form.vue'
 import Form from '@/Components/Weapons/Form.vue';
 
 const form = useForm({
-    name: ''
+    name: '',
+    description: '',
+    image_uri: '',
+    price: 0,
+    damage: 0,
+    defense: 0
 })
 </script>
 

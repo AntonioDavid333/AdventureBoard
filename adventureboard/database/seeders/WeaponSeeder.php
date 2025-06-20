@@ -15,7 +15,7 @@ class WeaponSeeder extends Seeder
     {
         Weapon::create([
     'name' => 'Iron Longsword',
-    'image_uri' => 'https://roninkatana.com/two-handed-medieval-long-sword-model-1/',
+    'image_uri' => 'https://picsum.photos/id/1/200/300',
     'description' => 'A well-balanced longsword forged from iron, suitable for most warriors.',
     'price' => 1500,
     'damage' => 25,

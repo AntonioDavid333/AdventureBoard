@@ -8,6 +8,9 @@ class Weapon extends Model
 {
     protected $guarded = [];
 
+    protected $fillable = ['name', 'description','image_uri', 'price', 'damage', 'defense'];
+
+
     public function equipments()
     {
         return $this->hasMany(Heroe::class);
