@@ -66,23 +66,30 @@ class WeaponController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $weapon = Weapon::findOrFail($id);
+        return inertia('Weapons/Edit', ['weapon' => $weapon]);
     }
 
     /**
      * Update the specified resource in storage.
+     * 
+     * @param App\Http\Requests\WeaponRequest
+     * @param int $id
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $id)
+    public function update(WeaponRequest $request, $id)
     {
-        //
+        $weapon = Weapon::findOrFail($id);
+        $weapon->update($request->validated());
+        return redirect()->route('weapons.index');
     }
 
     /**

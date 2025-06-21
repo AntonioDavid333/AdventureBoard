@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Weapon extends Model
 {
-    protected $guarded = [];
+    //protected $guarded = [];
 
     protected $fillable = ['name', 'description','image_uri', 'price', 'damage', 'defense'];
 

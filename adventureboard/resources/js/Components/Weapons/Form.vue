@@ -11,6 +11,7 @@ import InputLabel from '../InputLabel.vue';
 import PrimaryButton from '../PrimaryButton.vue';
 import TextInput from '../TextInput.vue';
 
+
 defineProps({
     form: {
         type: Object,
@@ -23,6 +24,7 @@ defineProps({
     }
 
 });
+
 
 defineEmits(['submit'])
 </script>
@@ -47,26 +49,31 @@ defineEmits(['submit'])
                 <div class="flex items-center gap-4 w-full pt-4 pb-2">
                 <InputLabel for="description" value="Description" class="w-32 shrink-0" />
                 <textarea id="description" v-model="form.description" type="text" autocomplete="description" class="flex-1 border border-gray-300 rounded-md"></textarea>
+                <InputError :message="$page.props.errors.description" class="mt-2"></InputError>
                 </div>
 
                 <div class="flex items-center gap-4 w-full pt-4 pb-2">
                 <InputLabel for="image_uri" value="image_uri" class="w-32 shrink-0" />
                 <TextInput id="image_uri" v-model="form.image_uri" type="text" autocomplete="image_uri" class="flex-1" />
-                </div>
-
-                <div class="flex items-center gap-4 w-full pt-4 pb-2">
-                <InputLabel for="price" value="Price" class="w-32 shrink-0" />
-                <TextInput id="price" v-model="form.price" type="number" autocomplete="price" class="flex-1" />
+                <InputError :message="$page.props.errors.image_uri" class="mt-2"></InputError>
                 </div>
 
                 <div class="flex items-center gap-4 w-full pt-4 pb-2">
                 <InputLabel for="damage" value="Damage" class="w-32 shrink-0" />
                 <TextInput id="damage" v-model="form.damage" type="number" autocomplete="damage" class="flex-1" />
+                <InputError :message="$page.props.errors.damage" class="mt-2"></InputError>
                 </div>
 
                 <div class="flex items-center gap-4 w-full pt-4 pb-2">
                 <InputLabel for="defense" value="Defense" class="w-32 shrink-0" />
                 <TextInput id="defense" v-model="form.defense" type="number" autocomplete="defense" class="flex-1" />
+                <InputError :message="$page.props.errors.defense" class="mt-2"></InputError>
+                </div>
+
+                <div class="flex items-center gap-4 w-full pt-4 pb-2">
+                <InputLabel for="price" value="Price" class="w-32 shrink-0" />
+                <TextInput id="price" v-model="form.price" type="number" autocomplete="price" class="flex-1" />
+                <InputError :message="$page.props.errors.price" class="mt-2"></InputError>
                 </div>
             </div> 
 

@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script setup>
-import { usePage } from '@inertiajs/vue3'
+import { router, usePage } from '@inertiajs/vue3'
 import { computed } from 'vue'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import { Link } from '@inertiajs/vue3';
@@ -16,8 +16,11 @@ const deleteWeapon = (id) => {
         router.delete(route('weapons.destroy', id))
     }
 }
+
+
 const page = usePage()
 const weapons = computed(() => page.props.weapons)
+//const weapon = computed(() => page.props.weapon)
 const isAdmin = computed(() => page.props.auth.roles.includes('admin'))
 
 //import { route } from 'vendor/tightenco/ziggy/src/js';
@@ -61,7 +64,9 @@ const isAdmin = computed(() => page.props.auth.roles.includes('admin'))
                                         class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition mb-8">
                                         Comprar
                                         </button>
-                                    <Link class="text-gray-400 ml-8" v-if="isAdmin" @click="deleteWeapon(weapon.id)">Delete</Link>
+                                    <Link class="text-gray-400 ml-8 mr-2" v-if="isAdmin" :href="route('weapons.edit', weapon.id)">Edit</Link>
+                                    <span class="text-gray-400 mx-2" v-if="isAdmin">|</span>
+                                    <Link class="text-red-600 mx-2" v-if="isAdmin" @click="deleteWeapon(weapon.id)">Delete</Link>
                                 </div> 
                             </li>
 

@@ -25,7 +25,7 @@ class WeaponRequest extends FormRequest
         return [
             'name'=> ['required', 'string', 'max:50', Rule::unique(table: 'weapons', column: 'name')->ignore(id: request('weapon'), idColumn: 'id')],
             'description'=> ['string', 'max:200'],
-            'image_uri'=> ['string', 'max:255'],
+            'image_uri'=> ['nullable', 'string', 'max:255'],
             'price'=> ['required', 'integer', 'min:0'],
             'damage'=> ['required', 'integer', 'min:0'],
             'defense'=> ['required', 'integer', 'min:0']
@@ -38,4 +38,14 @@ class WeaponRequest extends FormRequest
         ];
 
     }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'damage' => ltrim($this->damage, '0') === '' ? 0 : ltrim($this->damage, '0'),
+            'defense' => ltrim($this->defense, '0') === '' ? 0 : ltrim($this->defense, '0'),
+            'price' => ltrim($this->price, '0') === '' ? 0 : ltrim($this->price, '0'),
+        ]);
+    }
+    
 }
