@@ -10,6 +10,9 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Heroe;
+use App\Models\Weapon;
+use App\Models\Purchase;
 
 class User extends Authenticatable
 {
@@ -66,4 +69,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function heroes()
+    {
+        return $this->hasMany(Heroe::class);
+    }
+
+    public function purchasedWeapons()
+    {
+        return $this->belongsToMany(Weapon::class, 'purchases', 'user_id', 'weapon_id');
+                     
+    }
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
+    }
+    
 }

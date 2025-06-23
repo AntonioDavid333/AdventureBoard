@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Weapon;
 use App\Http\Requests\WeaponRequest;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Purchase;
+use Inertia\Inertia;
+use App\Models\User;
+use App\Models\Heroe;
 
 class WeaponController extends Controller
 {
@@ -13,31 +18,39 @@ class WeaponController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
         $weapons = Weapon::all();
-        return inertia ('Weapons/index', ['weapons'=> $weapons]);
+        $purchasedWeapons = $user->purchasedWeapons;
+        return inertia ('Weapons/index', ['weapons'=> $weapons, 'purchasedWeapons' => $purchasedWeapons, 'auth' => [
+            'user' => $user,
+            'roles' => $user->getRoleNames(),
+        ],]);
     }
     /**
      * Buys the weapon and stores it into purchases if user has money enough.
      */
-    public function buy()
+    public function buy($weaponId)
     {
+        $weapon = Weapon::findOrFail($weaponId);
         $user = Auth::user();
 
-        // Suponemos que el usuario tiene una propiedad "balance" o "money"
+        if ($user->purchasedWeapons()->where('weapon_id', $weaponId)->exists()) {
+            return back()->with('error', 'Ya tienes esta arma.');
+        }
+
         if ($user->coins >= $weapon->price) {
-            // Resta el precio al balance del usuario
             $user->coins -= $weapon->price;
             $user->save();
 
-            // Guarda la compra
             Purchase::create([
                 'user_id' => $user->id,
                 'weapon_id' => $weapon->id,
             ]);
 
+            // Recarga los datos y devuelve la vista actualizada
             return redirect()->back()->with('success', 'Compra realizada con éxito.');
         } else {
-            return redirect()->back()->with('error', 'Dinero insuficiente para esta compra.');
+            return back()->with('error', 'Dinero insuficiente para esta compra.');
         }
     }
 

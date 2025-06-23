@@ -37,13 +37,11 @@ class HandleInertiaRequests extends Middleware
    public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            'auth' => fn () => [
-                'user' => $request->user() ? [
-                    'id' => $request->user()->id,
-                    'name' => $request->user()->name,
-                    'email' => $request->user()->email,
-                    'coins' => $request->user()->coins
-                ] : null,
+           'auth' => fn () => [
+                'user' => $request->user() ? array_merge(
+                    $request->user()->toArray(),
+                    ['coins' => $request->user()->coins]
+                ) : null,
                 'roles' => $request->user()
                     ? $request->user()->getRoleNames()
                     : [],
@@ -51,6 +49,10 @@ class HandleInertiaRequests extends Middleware
                     ? $request->user()->getAllPermissions()->pluck('name')
                     : [],
             ],
+            'flash' => [
+            'success' => fn () => $request->session()->get('success'),
+            'error' => fn () => $request->session()->get('error'),
+        ],
         ]);
     }
 }

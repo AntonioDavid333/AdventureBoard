@@ -21,4 +21,14 @@ class Weapon extends Model
         return $this->hasMany(Purchase::class);
     }
 
+    public function heroes()
+    {
+        return $this->belongsToMany(Heroe::class, 'equipments');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'purchases');
+    }
+
 }

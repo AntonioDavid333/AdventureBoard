@@ -14,7 +14,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::resource('heroes', HeroeController::class);
     Route::resource('quests', QuestController::class);
-   // Route::post('/weapons/{weapon}/buy', [WeaponController::class, 'buy']);
+    Route::post('/weapons/{weapon}/buy', [WeaponController::class, 'buy'])->name('weapons.buy');
     Route::resource('weapons', WeaponController::class);
     Route::resource('purchases', PurchaseController::class);
 });
