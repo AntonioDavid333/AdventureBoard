@@ -45,8 +45,6 @@ const form = useForm({
                     <div class="p-6 bg-white border-b border-gray-200">
                         <WeaponForm :updating="true" :form="form" @submit="form.put(route('weapons.update', weapon.id))"/>
                     </div>
-                    <pre>{{ props.weapon }}</pre>
-                    <pre>{{ form }}</pre>
                 </div>
             </div>
         </div>

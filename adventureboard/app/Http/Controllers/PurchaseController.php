@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Purchase;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Inertia\Inertia;
+use App\Models\Weapon;
+use App\Models\Heroe;
+use App\Http\Requests\PurchaseRequest;
 
 class PurchaseController extends Controller
 {
@@ -57,8 +64,20 @@ class PurchaseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($weaponId)
     {
-        //
+        $weapon= Weapon::findOrFail($weaponId);
+        $user = auth()->user();
+        $purchase = $user->purchases()->where('weapon_id', $weaponId)->first();
+        if ($purchase) {
+            $price = $weapon->price;
+            $user->coins += $price; // Reembolsar el precio de la arma
+            $user->save();
+            $purchase->delete();
+
+            return back()->with('success', 'Arma eliminada del inventario.');
+        }
+
+        return back()->with('error', 'No tienes esta arma en tu inventario.');
     }
 }

@@ -13,14 +13,15 @@ class Purchase extends Model
         return $this->belongsTo(Weapon::class);
     }
 
-    public function users()
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function equipment()
     {
         return $this->hasOne(Equipment::class);
     }
+
 
 }

@@ -108,8 +108,21 @@ class WeaponController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($weaponId)
     {
-        //
+        $weapon = Weapon::findOrFail($weaponId);
+
+        $purchases = $weapon->purchases()->with('user')->get();
+
+        foreach ($purchases as $purchase) {
+            $user = $purchase->user;
+            if ($user) {
+                $user->coins += $weapon->price;
+                $user->save();
+            }
+        }
+        
+        $weapon->delete();
+        return redirect()->route('weapons.index')->with('success', 'Arma eliminada correctamente.');
     }
 }
