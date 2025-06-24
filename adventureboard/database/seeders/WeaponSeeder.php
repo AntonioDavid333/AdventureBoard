@@ -15,7 +15,7 @@ class WeaponSeeder extends Seeder
     {
         Weapon::create([
     'name' => 'Iron Longsword',
-    'image_uri' => 'https://picsum.photos/id/1/200/300',
+    'image_uri' => 'https://picsum.photos/500/350',
     'description' => 'A well-balanced longsword forged from iron, suitable for most warriors.',
     'price' => 1500,
     'damage' => 25,
@@ -24,7 +24,7 @@ class WeaponSeeder extends Seeder
 
     Weapon::create([
         'name' => 'Knight\'s Shield',
-        'image_uri' => 'https://loremflickr.com/320/240/weapon',
+        'image_uri' => 'https://picsum.photos/500/350',
         'description' => 'A sturdy shield used by royal knights, offering excellent protection.',
         'price' => 2000,
         'damage' => 5,
@@ -33,7 +33,7 @@ class WeaponSeeder extends Seeder
 
     Weapon::create([
         'name' => 'Elven Bow',
-        'image_uri' => 'https://loremflickr.com/320/240/weapon',
+        'image_uri' => 'https://picsum.photos/500/350',
         'description' => 'A finely crafted bow made by elves, lightweight and deadly accurate.',
         'price' => 3000,
         'damage' => 35,
@@ -42,7 +42,7 @@ class WeaponSeeder extends Seeder
 
     Weapon::create([
         'name' => 'Dwarven Axe',
-        'image_uri' => 'https://loremflickr.com/320/240/weapon',
+        'image_uri' => 'https://picsum.photos/500/350',
         'description' => 'A heavy battle axe used by dwarves, capable of dealing massive damage.',
         'price' => 2500,
         'damage' => 40,
@@ -51,7 +51,7 @@ class WeaponSeeder extends Seeder
 
     Weapon::create([
         'name' => 'Apprentice Staff',
-        'image_uri' => 'https://loremflickr.com/320/240/weapon',
+        'image_uri' => 'https://picsum.photos/500/350',
         'description' => 'A simple wooden staff imbued with weak magical energy.',
         'price' => 800,
         'damage' => 15,

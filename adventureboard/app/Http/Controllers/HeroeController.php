@@ -13,9 +13,15 @@ class HeroeController extends Controller
      */
     public function index()
     {
-        
+        $user = auth()->user();
+        $purchasedWeapons = $user ? $user->purchasedWeapons : collect();
+        $weapons = $user ? $user->weapons : collect();
         $heroes = Heroe::paginate(10);
-        return inertia('Heroes/index', ['heroes' => $heroes]);
+        return inertia('Heroes/index', [
+            'heroes' => $heroes,
+            'purchasedWeapons' => $purchasedWeapons,
+            'weapons' => $weapons
+        ]);
     }
 
     /**

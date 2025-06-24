@@ -44,7 +44,7 @@ const logout = () => {
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('dashboard')">
-                                    <ApplicationMark class="block h-9 w-auto" />
+                                    <ApplicationMark class="block h-12 w-auto" />
                                 </Link>
                             </div>
 
@@ -64,11 +64,7 @@ const logout = () => {
                                     Purchases
                                 </NavLink>
                             </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('heroes.index')" :active="route().current('heroes.*')">
-                                    Heroes
-                                </NavLink>
-                            </div>
+                            
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('weapons.index')" :active="route().current('weapons.*')">
                                     Weapons
@@ -139,19 +135,19 @@ const logout = () => {
                                     </template>
                                 </Dropdown>
                             </div>
-                            <pre class="px-4 py-2 text-xl rounded-3xl bg-gray-200  text-gray-800">🪙 {{ $page.props.auth.user.coins }}</pre>
+                            <pre v-if="$page.props.auth.user" class="px-4 py-2 text-xl rounded-3xl bg-gray-200  text-gray-800">🪙 {{ $page.props.auth.user.coins }}</pre>
 
                             <!-- Settings Dropdown -->
                             <div class="ms-3 relative">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <button v-if="$page.props.jetstream.managesProfilePhotos" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                            <img class="size-8 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
+                                            <img v-if="$page.props.auth.user" class="size-8 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
                                         </button>
 
                                         <span v-else class="inline-flex rounded-md">
                                             <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                                {{ $page.props.auth.user.name }}
+                                                {{ $page.props.auth.user ? $page.props.auth.user.name : 'Invitado' }}
 
                                                 <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -233,11 +229,7 @@ const logout = () => {
                             Purchases
                         </NavLink>
                     </div>
-                    <div class="pt-2 pb-3 space-y-1">
-                        <NavLink :href="route('heroes.index')" :active="route().current('heroes.*')">
-                            Heroes
-                        </NavLink>
-                    </div>
+                    
                     <div class="pt-2 pb-3 space-y-1">
                         <NavLink :href="route('weapons.index')" :active="route().current('weapons.*')">
                             Weapons
@@ -258,10 +250,10 @@ const logout = () => {
 
                             <div>
                                 <div class="font-medium text-base text-gray-800">
-                                    {{ $page.props.auth.user.name }}
+                                    {{ $page.props.auth.user?.name ?? 'Invitado' }}
                                 </div>
                                 <div class="font-medium text-sm text-gray-500">
-                                    {{ $page.props.auth.user.email }}
+                                    {{ $page.props.auth.user?.email ?? 'No Email' }}
                                 </div>
                             </div>
                         </div>
