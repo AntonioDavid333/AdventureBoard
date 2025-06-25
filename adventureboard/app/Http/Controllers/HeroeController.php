@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Heroe;
 use Inertia\Response;
+use App\Models\Race;
+use App\Models\Classrole;
+use App\Models\Faction;
+
 
 class HeroeController extends Controller
 {
@@ -29,7 +33,14 @@ class HeroeController extends Controller
      */
     public function create()
     {
-        //
+        $races = Race::all();
+        $classroles = Classrole::all();
+        $factions = Faction::all();
+        return inertia('Heroes/Create', [
+            'races' => $races,
+            'classroles' => $classroles,
+            'factions' => $factions
+        ]);
     }
 
     /**
