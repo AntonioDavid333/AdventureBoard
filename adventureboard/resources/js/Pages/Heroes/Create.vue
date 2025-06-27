@@ -28,12 +28,13 @@ const form = useForm({
     name: '',
     background: '',
     image_uri: '',
-    damage: 0,
-    defense: 0,
-    price: 0,
-    classrole: 1,
-    race: 1,
-    faction: 1, 
+    hp: 100,
+    strength: 20,
+    defense: 20,
+    ki: 20,
+    classrole_id: 1,
+    race_id: 1,
+    faction_id: null, 
 })
 </script>
 

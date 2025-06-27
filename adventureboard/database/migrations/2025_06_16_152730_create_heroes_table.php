@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('name',200);
             $table->unsignedBigInteger('classrole_id')->default(1);
             $table->unsignedBigInteger('race_id')->default(1);
-            $table->unsignedBigInteger('ph')->default(100);
-            $table->unsignedBigInteger('strength')->default(30);
+            $table->unsignedBigInteger('hp')->default(100);
+            $table->unsignedBigInteger('strength')->default(20);
             $table->unsignedBigInteger('defense')->default(20);
             $table->unsignedBigInteger('ki')->default(20);
             $table->unsignedBigInteger('level')->default(0);

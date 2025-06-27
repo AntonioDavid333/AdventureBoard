@@ -8,6 +8,11 @@ class Heroe extends Model
 {
     protected $guarded = [];
 
+    protected $fillable = [
+        'name', 'background', 'image_uri', 'race_id', 'classrole_id', 'faction_id',
+        'hp', 'strength', 'defense', 'ki'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

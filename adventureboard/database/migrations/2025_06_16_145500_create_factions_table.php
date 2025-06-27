@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('image_uri')->nullable();
             $table->string('name',100);
             $table->text('description')->max(400);
+            $table->unsignedInteger('bonus_at')->default(0);   // Ataque
+            $table->unsignedInteger('bonus_def')->default(0);  // Defensa
+            $table->unsignedInteger('bonus_ki')->default(0);  // Ki
+            $table->unsignedInteger('bonus_hp')->default(0);  // HP
             $table->timestamps();
         });
     }

@@ -8,6 +8,7 @@ use Inertia\Response;
 use App\Models\Race;
 use App\Models\Classrole;
 use App\Models\Faction;
+use App\Http\Requests\HeroRequest;
 
 
 class HeroeController extends Controller
@@ -46,9 +47,19 @@ class HeroeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(HeroRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        if ($request->hasFile('image_uri')) {
+            $file = $request->file('image_uri');
+            $path = $file->store('Heroes_images', 'public'); // Guarda en storage/app/public/Heroes_images
+            $data['image_uri'] = $path; // Guarda solo la ruta relativa
+        }
+
+        Heroe::create($data);
+
+        return redirect()->route('heroes.index');
     }
 
     /**

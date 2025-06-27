@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('races', function (Blueprint $table) {
             $table->id();
             $table->string('race_name');
+            $table->unsignedInteger('bonus_at')->default(0);   // Ataque
+            $table->unsignedInteger('bonus_def')->default(0);  // Defensa
+            $table->unsignedInteger('bonus_ki')->default(0);  // Ki
+            $table->unsignedInteger('bonus_hp')->default(0);  // HP
             $table->timestamps();
         });
     }
