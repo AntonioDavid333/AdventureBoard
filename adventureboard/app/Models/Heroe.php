@@ -10,7 +10,7 @@ class Heroe extends Model
 
     protected $fillable = [
         'name', 'background', 'image_uri', 'race_id', 'classrole_id', 'faction_id',
-        'hp', 'strength', 'defense', 'ki'
+        'hp', 'defense', 'ki', 'strength', 'user_id'
     ];
 
     public function user()

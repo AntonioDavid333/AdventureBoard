@@ -19,7 +19,7 @@ const props = defineProps({
     weapons: Array,
     purchasedWeapons: Array,
     auth: Object,
-    heroes: Array
+    heroes: Object
 });
 
 const deleteWeapon = (id) => {
@@ -48,10 +48,19 @@ const openWeaponDetails = (weapon) => { selectedWeapon.value = weapon }
 const closeWeaponDetails = () => { selectedWeapon.value = null }
 
 const selectedHero = ref(null)
-const heroesList = computed(() => page.props.heroes)
+const heroesList = computed(() => page.props.heroes?.data ?? []);
 
 const openHeroDetails = (hero) => { selectedHero.value = hero }
 const closeHeroDetails = () => { selectedHero.value = null }
+
+const deleteHero = (id) => {
+    if (confirm('Are you sure you want to delete this hero?')) {
+        router.delete(route('heroes.destroy', id))
+    }
+}
+
+console.log('props.heroes:', props.heroes);
+console.log('page.props.heroes:', page.props.heroes);
 
 </script>
 
@@ -77,34 +86,90 @@ const closeHeroDetails = () => { selectedHero.value = null }
                             <div class="p-6 bg-white border-b border-gray-200">
                                 <div class="flex gap-4">
                                     <Link class="inline-block px-4 py-2 bg-green-600 text-white font-semibold rounded hover:bg-green-700 transition" :href="route('heroes.create')">
-                                        Create hero
+                                        Create hero 🪙100
                                     </Link>
                                 </div>
                             </div>
-                            <div class="bg-white py-8 sm:py-12">
+                            <div class="bg-white">
                                 <div class="mx-auto w-full px-6 lg:px-8">
                                     <div class="max-w-xl">
                                     <h2 class="text-3xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-4xl">Your heroes</h2>
                                     </div>
-                                    <ul role="list" class="flex flex-wrap gap-6 justify-center py-8">
-                                    <!--<li
-                                        v-for="hero in heroesList" :key="hero.id"
-                                        class="w-80 bg-white rounded-md shadow-md flex flex-col items-center text-center transform transition duration-300 hover:scale-105"
-                                        @click="openHeroDetails(hero)">
-                                        <img class="w-full h-60 object-cover rounded-t-md" :src="hero.image_uri" alt="Hero image" />
-                                        <div class="mt-4">
-                                            <h3 class="text-xl font-semibold text-gray-900 mx-4">{{ hero.name }}</h3>
-                                            <p class="text-sm text-gray-600 mt-1 mx-4">{{ hero.description }}</p>
-                                            <p class="text-lg text-gray-800 mt-2 mx-4">💥 Damage: {{ hero.damage }}</p>
-                                            <p class="text-lg text-gray-800">🛡️ Defense: {{ hero.defense }}</p>
-                                            <p class="text-lg text-indigo-600 mt-2 font-semibold">🪙 {{ hero.price }}</p>
-                                            <Link class="text-gray-400 ml-8 mr-2" v-if="isAdmin" @click.stop="editWeapon(hero.id)">Edit</Link>
-                                            <span class="text-gray-400 mx-2" v-if="isAdmin">|</span>
-                                            <Link class="text-red-600 mx-2" v-if="isAdmin" @click.stop="deleteWeapon(hero.id)">Delete</Link>
-                                        </div>
-                                    </li>-->
+                                    <ul role="list" class="flex flex-wrap gap-6 justify-start py-8">
+                                        <li
+                                            v-for="hero in heroesList"
+                                            :key="hero.id"
+                                            class="bg-white rounded-xl w-72 flex flex-col items-center relative pb-8 overflow-hidden shadow-lg drop-shadow-[6px_8px_12px_rgba(0,0,0,0.15)] transition duration-300 transform hover:scale-105"
+                                        >
 
-                                    <!-- More heroes... -->
+                                            <div class="w-full relative h-56">
+                                                <img
+                                                    v-if="hero.image_uri"
+                                                    :src="`/storage/${hero.image_uri}`"
+                                                    alt="Hero image"
+                                                    class="absolute top-0 left-0 w-full h-56 object-cover object-top rounded-t-xl"
+                                                />
+                                            </div>
+                                            <div class="flex-1 w-full pt-4 pl-4">
+                                                <div class="font-bold text-xl text-center py-2">{{ hero.name }}</div>
+                                                <!--<div class="text-gray-600 text-sm text-center m-2">{{ hero.background }}</div>-->
+                                                <div class="m-2 w-full text-left space-y-2">
+                                                    <div class="flex items-center">
+                                                        <span class="w-10">💊</span>
+                                                        <div class="flex-1 ml-2 flex items-center">
+                                                            <div class="bg-gray-200 rounded h-4 w-3/5">
+                                                                <div class="bg-indigo-500 h-4 rounded" :style="{ width: (hero.hp / 10) + '%' }"></div>
+                                                            </div>
+                                                            <span class="ml-2 font-bold text-xs text-gray-700">{{ hero.hp }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <span class="w-10">💥</span>
+                                                        <div class="flex-1 ml-2 flex items-center">
+                                                            <div class="bg-gray-200 rounded h-4 w-3/5">
+                                                                <div class="bg-indigo-500 h-4 rounded" :style="{ width: (hero.strength / 10) + '%' }"></div>
+                                                            </div>
+                                                            <span class="ml-2 font-bold text-xs text-gray-700">{{ hero.strength }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <span class="w-10">🛡️</span>
+                                                        <div class="flex-1 ml-2 flex items-center">
+                                                            <div class="bg-gray-200 rounded h-4 w-3/5">
+                                                                <div class="bg-indigo-500 h-4 rounded" :style="{ width: (hero.defense / 10) + '%' }"></div>
+                                                            </div>
+                                                            <span class="ml-2 font-bold text-xs text-gray-700">{{ hero.defense }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center ">
+                                                        <span class="w-10">✨</span>
+                                                        <div class="flex-1 ml-2 mb-4 flex items-center">
+                                                            <div class="bg-gray-200 rounded h-4 w-3/5">
+                                                                <div class="bg-indigo-500 h-4 rounded" :style="{ width: (hero.ki / 10) + '%' }"></div>
+                                                            </div>
+                                                            <span class="ml-2 font-bold text-xs text-gray-700">{{ hero.ki }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="w-full px-2 mt-6 relative">
+                                                    <span class="absolute -top-8 right-6 flex items-end">
+                                                        <span class="text-3xl font-extrabold text-gray-400 opacity-80 select-none leading-none">{{ hero.level ?? 1 }}</span>
+                                                        <span class="ml-1 text-xs text-gray-500 mb-1">Lvl</span>
+                                                    </span>
+                                                    <div class="bg-gray-300 rounded h-1 w-full">
+                                                        <div class="bg-indigo-500 h-1 rounded" :style="{ width: (hero.experience ?? 0) + '%' }"></div>
+                                                    </div>
+                                                </div>
+                                                <!-- Botón eliminar -->
+                                                <button
+                                                    @click="deleteHero(hero.id)"
+                                                    class="absolute top-2 right-2 hover:text-red-700 text-red-600 rounded-full p-2 shadow transition"
+                                                    title="Eliminar héroe"
+                                                >
+                                                    🗑️
+                                                </button>
+                                            </div>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>

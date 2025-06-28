@@ -85,7 +85,7 @@ function removeImage() {
 }
 
 const totalBonuses = computed(() => {
-    const base = {hp: 20, at: 20, def: 20, ki: 20};
+    const base = {hp: 100, at: 20, def: 20, ki: 20};
     if (selectedFaction.value) {
         base.hp += selectedFaction.value.bonus_hp || 0;
         base.at += selectedFaction.value.bonus_at || 0;
@@ -235,7 +235,7 @@ function handleSubmit() {
                     </p>
 
                     <div class="items-end mt-6 p-4 bg-gray-300 rounded shadow text-gray-800 w-2/3 ml-auto">
-    <p>
+    <div>
         <h3 class="font-bold text-xl">Statics:</h3>
         <div class="m-4 text-md italic text-right">
             <div class="flex justify-between items-center gap-4 ">
@@ -259,7 +259,7 @@ function handleSubmit() {
                 <span>{{ totalBonuses.ki }}</span>
             </div>
         </div>
-    </p>
+    </div>
 </div>
             </div>
             

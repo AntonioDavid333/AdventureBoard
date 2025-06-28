@@ -22,6 +22,7 @@ class HeroRequest extends FormRequest
     public function rules(): array
     {
         return [
+            //'user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
             'background' => 'nullable|string|max:1000',
             'image_uri' => 'nullable|file|image|max:2048',
