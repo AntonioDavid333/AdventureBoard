@@ -12,7 +12,8 @@ class DashboardController extends Controller
     {
         /*$user = auth()->user();
         $purchasedWeapons = $user ? $user->purchasedWeapons : collect();
-        $weapons = $user ? $user->weapons : collect();*/
+        $weapons = $user ? $user->weapons : collect();
+        $purchases = $user->purchases()->with('weapon')->get() ?? collect();*/
 
         return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -25,16 +26,18 @@ class DashboardController extends Controller
     public function dashboard()
     {
         $user = auth()->user();
-        $purchasedWeapons = $user ? $user->purchasedWeapons : collect();
+        /*$purchasedWeapons = $user ? $user->purchasedWeapons : collect();*/
         $weapons = $user ? $user->weapons : collect();
+        $purchases = $user->purchases()->with('weapon')->get() ?? collect();
 
         return Inertia::render('Dashboard/Index', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
-            'purchasedWeapons' => $purchasedWeapons,
-            'weapons' => $weapons
+            //'purchasedWeapons' => $purchasedWeapons,
+            'weapons' => $weapons,
+            'purchases' => $purchases
         ]);
         }
 }

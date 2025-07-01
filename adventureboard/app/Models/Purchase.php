@@ -8,7 +8,7 @@ class Purchase extends Model
 {
     protected $guarded = [];
 
-    public function weapons()
+    public function weapon()
     {
         return $this->belongsTo(Weapon::class);
     }

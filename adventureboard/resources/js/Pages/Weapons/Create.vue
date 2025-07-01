@@ -13,7 +13,7 @@ import Form from '@/Components/Weapons/Form.vue';
 const form = useForm({
     name: '',
     description: '',
-    image_uri: '',
+    image_uri: 'storage/app/public/Weapons_images/default.jpg', 
     damage: 0,
     defense: 0,
     price: 0,

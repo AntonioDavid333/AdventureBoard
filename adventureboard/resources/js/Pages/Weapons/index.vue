@@ -17,7 +17,7 @@ import { computed, ref } from 'vue';
 
 const props = defineProps({
     weapons: Array,
-    purchasedWeapons: Array,
+    purchases: Array,
     auth: Object
 });
 
@@ -89,7 +89,7 @@ const closeWeaponDetails = () => { selectedWeapon.value = null }
                                         v-for="weapon in weapons" :key="weapon.id"
                                         class="w-80 bg-white rounded-md shadow-md flex flex-col items-center text-center transform transition duration-300 hover:scale-105"
                                         @click="openWeaponDetails(weapon)">
-                                        <img class="w-full h-60 object-cover rounded-t-md" :src="weapon.image_uri" alt="Weapon image" />
+                                        <img class="w-full h-60 object-cover rounded-t-md" :src="`/storage/${weapon.image_uri}`" alt="Weapon image" />
                                         <div class="mt-4">
                                             <h3 class="text-xl font-semibold text-gray-900 mx-4">{{ weapon.name }}</h3>
                                             <p class="text-sm text-gray-600 mt-1 mx-4">{{ weapon.description }}</p>

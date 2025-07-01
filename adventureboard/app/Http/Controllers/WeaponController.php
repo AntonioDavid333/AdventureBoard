@@ -20,8 +20,9 @@ class WeaponController extends Controller
     {
         $user = Auth::user();
         $weapons = Weapon::all();
-        $purchasedWeapons = $user->purchasedWeapons;
-        return inertia ('Weapons/index', ['weapons'=> $weapons, 'purchasedWeapons' => $purchasedWeapons, 'auth' => [
+        $purchases = $user->purchases()->with('weapon')->get();
+        //$purchasedWeapons = $user->purchasedWeapons;
+        return inertia ('Weapons/index', ['weapons'=> $weapons, 'purchases' => $purchases, 'auth' => [
             'user' => $user,
             'roles' => $user->getRoleNames(),
         ],]);
@@ -70,7 +71,17 @@ class WeaponController extends Controller
      */
     public function store(WeaponRequest $request)
     {
-        Weapon::create($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('image_uri')) {
+            $file = $request->file('image_uri');
+            $path = $file->store('Weapons_images', 'public');
+            $data['image_uri'] = $path;
+        } else {
+            $data['image_uri'] = 'Weapons_images/default.jpg';
+        }
+
+        Weapon::create($data);
         return redirect()->route('weapons.index');
     }
 

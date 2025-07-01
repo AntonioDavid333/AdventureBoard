@@ -8,6 +8,8 @@ use Inertia\Response;
 use App\Models\Race;
 use App\Models\Classrole;
 use App\Models\Faction;
+use App\Models\Equipment;
+use App\Models\Purchase;
 use App\Http\Requests\HeroRequest;
 
 
@@ -19,14 +21,19 @@ class HeroeController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $purchases = $user ? $user->purchases()->with('weapon')->get() : collect();
         $purchasedWeapons = $user ? $user->purchasedWeapons : collect();
         $weapons = $user ? $user->weapons : collect();
-        $heroes = $user->heroes()->paginate(10); 
+        $heroes = $user->heroes()->with(['race', 'classrole', 'faction', 'equipments' => function ($query) {
+            $query->with(['purchase.weapon']);
+        },])->paginate(10);
+         
 
         return inertia('Heroes/index', [
             'heroes' => $heroes,
             'purchasedWeapons' => $purchasedWeapons,
-            'weapons' => $weapons
+            'weapons' => $weapons,
+            'purchases' => $purchases,
         ]);
     }
 
@@ -113,5 +120,29 @@ class HeroeController extends Controller
         $heroe = Heroe::findOrFail($HeroId);
         $heroe->delete();
         return redirect()->route('heroes.index')->with('success', 'Héroe eliminado correctamente.');
+    }
+
+    public function attach(Request $request)
+    {
+        $request->validate([
+            'heroe_id' => 'required|exists:heroes,id',
+            'purchase_id' => 'required|exists:purchases,id',
+        ]);
+
+         $exists = Equipment::where('heroe_id', $request->heroe_id)
+                       ->where('purchase_id', $request->purchase_id)
+                       ->exists();
+
+        if ($exists) {
+            return redirect()->route('heroes.index')->with('error', 'La arma ya está adjunta a este héroe.');
+        }else {  
+            Equipment::create([
+                'heroe_id' => $request->heroe_id,
+                'purchase_id' => $request->purchase_id,
+                
+            ]);
+
+            return redirect()->route('heroes.index')/*->with('success', 'Arma adjuntado correctamente.')*/;
+        }
     }
 }

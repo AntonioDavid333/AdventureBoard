@@ -5,14 +5,15 @@ export default {
 </script>
 
 <script setup>
+import { ref } from 'vue';
 import FormSection from '../FormSection.vue';
 import InputError from '../InputError.vue';
 import InputLabel from '../InputLabel.vue';
 import PrimaryButton from '../PrimaryButton.vue';
 import TextInput from '../TextInput.vue';
+import SecondaryButton from '../SecondaryButton.vue';
 
-
-defineProps({
+const props = defineProps({
     form: {
         type: Object,
         required: true
@@ -22,11 +23,39 @@ defineProps({
         required: false,
         default: false
     }
-
 });
 
-
 defineEmits(['submit'])
+
+const fileInput = ref(null);
+const imagePreview = ref(null);
+
+function triggerFileInput() {
+    fileInput.value && fileInput.value.click();
+}
+
+function onFileChange(event) {
+    const file = event.target.files[0];
+    if (file) {
+        props.form.image_uri = file;
+        // Mostrar preview
+        const reader = new FileReader();
+        reader.onload = e => {
+            imagePreview.value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        imagePreview.value = null;
+    }
+}
+
+function removeImage() {
+    props.form.image_uri = '';
+    imagePreview.value = null;
+    if (fileInput.value) {
+        fileInput.value.value = '';
+    }
+}
 </script>
 
 <template>
@@ -53,8 +82,34 @@ defineEmits(['submit'])
                 </div>
 
                 <div class="flex items-center gap-4 w-full pt-4 pb-2">
-                <InputLabel for="image_uri" value="image_uri" class="w-32 shrink-0" />
-                <TextInput id="image_uri" v-model="form.image_uri" type="text" autocomplete="image_uri" class="flex-1" />
+                <InputLabel for="image_uri" value="Image" class="w-32 shrink-0" />
+                <!-- Input file oculto -->
+                <input
+                    ref="fileInput"
+                    id="image_uri"
+                    type="file"
+                    accept="image/*"
+                    class="hidden"
+                    @change="onFileChange"
+                />
+                <SecondaryButton type="button" class="mt-2 mr-2" @click="triggerFileInput">
+                    Upload Image
+                </SecondaryButton>
+                <span v-if="form.image_uri && form.image_uri.name" class="ml-2 text-sm text-gray-500 flex items-center">
+                    {{ form.image_uri.name }}
+                    <button
+                        type="button"
+                        class="ml-2 text-red-500 hover:text-red-700 font-bold text-xl"
+                        @click="removeImage"
+                        aria-label="Remove image"
+                    >
+                        ×
+                    </button>
+                </span>
+                <!-- Vista previa de la imagen -->
+                <div v-if="imagePreview" class="ml-4">
+                    <img :src="imagePreview" alt="Preview" class="w-16 h-16 object-cover rounded shadow" />
+                </div>
                 <InputError :message="$page.props.errors.image_uri" class="mt-2"></InputError>
                 </div>
 

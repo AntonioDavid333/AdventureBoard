@@ -7,6 +7,7 @@ use App\Http\Controllers\HeroeController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\WeaponController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\EquipmentController;
 
 Route::get('/', [DashboardController::class, 'index']);
 
@@ -17,5 +18,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::post('/weapons/{weapon}/buy', [WeaponController::class, 'buy'])->name('weapons.buy');
     Route::resource('weapons', WeaponController::class);
     Route::resource('purchases', PurchaseController::class);
+    Route::post('/heroes/attach', [HeroeController::class, 'attach'])->name('heroe.attach');
+    Route::resource('equipments', EquipmentController::class);
 });
 
