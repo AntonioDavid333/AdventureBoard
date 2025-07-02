@@ -46,6 +46,12 @@ const selectedWeapon = ref(null)
 const openWeaponDetails = (weapon) => { selectedWeapon.value = weapon }
 const closeWeaponDetails = () => { selectedWeapon.value = null }
 
+const equippedPurchaseIds = computed(() => {
+  return (page.props.heroes?.data ?? []).flatMap(hero =>
+    (hero.equipments ?? []).map(equipment => equipment.purchase_id)
+  )
+})
+
 </script>
 
 <template>
@@ -69,7 +75,7 @@ const closeWeaponDetails = () => { selectedWeapon.value = null }
                 <div class="max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
                     <div class="flex gap-8">
                         <div class="w-1/4">
-                            <PurchasedWeapons @show-details="openWeaponDetails" />
+                            <PurchasedWeapons :purchases="props.purchases" :equippedPurchaseIds="equippedPurchaseIds" @show-details="openWeaponDetails" />
                         </div>
                         <div class="flex-1">
                             <div v-if="isAdmin" class="p-6 bg-white border-b border-gray-200">

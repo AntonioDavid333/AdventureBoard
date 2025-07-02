@@ -64,20 +64,23 @@ class PurchaseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($weaponId)
+    public function destroy($purchaseId)
     {
-        $weapon= Weapon::findOrFail($weaponId);
-        $user = auth()->user();
-        $purchase = $user->purchases()->where('weapon_id', $weaponId)->first();
+        $purchase = Purchase::findOrFail($purchaseId);
+        $weapon = $purchase->weapon;
+        $user = Auth::user();
         if ($purchase) {
+            $purchase->equipment()->delete();
             $price = $weapon->price;
             $user->coins += $price; // Reembolsar el precio de la arma
             $user->save();
             $purchase->delete();
 
             return back()->with('success', 'Arma eliminada del inventario.');
+        }else {
+             return back()->with('error', 'No tienes esta arma en tu inventario.');
         }
 
-        return back()->with('error', 'No tienes esta arma en tu inventario.');
+       
     }
 }

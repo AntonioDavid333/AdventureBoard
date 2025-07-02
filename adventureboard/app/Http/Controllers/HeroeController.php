@@ -117,8 +117,10 @@ class HeroeController extends Controller
      */
     public function destroy($HeroId)
     {
+        $user = auth()->user();
         $heroe = Heroe::findOrFail($HeroId);
         $heroe->delete();
+        $user->coins += 100; // Reembolsar las monedas al eliminar el héroe
         return redirect()->route('heroes.index')->with('success', 'Héroe eliminado correctamente.');
     }
 

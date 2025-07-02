@@ -154,7 +154,7 @@ const purchasesFiltered = computed(() => {
                 <div class="max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
                     <div class="flex gap-8">
                         <div class="w-1/4">
-                            <PurchasedWeapons :purchases="purchasesFiltered" @show-details="openWeaponDetails" @drag-start="onDragStart" />
+                            <PurchasedWeapons :purchases="purchases" :equippedPurchaseIds="equippedPurchaseIds" @show-details="openWeaponDetails" @drag-start="onDragStart" />
                         </div>
                         <div class="flex-1">
                             <div class="p-6 bg-white border-b border-gray-200">

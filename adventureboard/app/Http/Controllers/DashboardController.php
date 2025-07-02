@@ -29,6 +29,7 @@ class DashboardController extends Controller
         /*$purchasedWeapons = $user ? $user->purchasedWeapons : collect();*/
         $weapons = $user ? $user->weapons : collect();
         $purchases = $user->purchases()->with('weapon')->get() ?? collect();
+        $heroes = $user->heroes()->with('equipments.purchase.weapon')->get();
 
         return Inertia::render('Dashboard/Index', [
             'canLogin' => Route::has('login'),
@@ -37,7 +38,8 @@ class DashboardController extends Controller
             'phpVersion' => PHP_VERSION,
             //'purchasedWeapons' => $purchasedWeapons,
             'weapons' => $weapons,
-            'purchases' => $purchases
+            'purchases' => $purchases,
+            'heroes' => $heroes
         ]);
         }
 }

@@ -8,6 +8,9 @@ defineProps({
   purchases: {
     type: Array,
     default: () => []
+  },
+  equippedPurchaseIds: {
+    type: Array
   }
 })
 
@@ -33,6 +36,12 @@ const deletePurchasedWeapon = (purchase) => {
             <div
                 class="flex items-center gap-2 rounded-xl p-4 bg-white shadow hover:bg-gray-100 transition space-between cursor-pointer"
                 @click="$emit('show-details', purchase.weapon)"
+                :class="[
+                    'p-4 rounded shadow cursor-pointer transition duration-200',
+                    equippedPurchaseIds.includes(purchase.id)
+                    ? 'bg-gray-200 opacity-60 pointer-events-none'
+                    : 'bg-white hover:bg-gray-100'
+                ]"
                 draggable="true"
                 @dragstart="(e) => { 
                     e.dataTransfer.setData('PurchaseId', purchase.id);
@@ -43,6 +52,7 @@ const deletePurchasedWeapon = (purchase) => {
                 <div class="flex-1 flex-col">
                     <div class="font-semibold text-xl">{{ purchase.weapon.name }}</div>
                     <div class="text-m text-gray-500">💥 {{ purchase.weapon.damage }} | 🛡️ {{ purchase.weapon.defense }}</div>
+                    <span v-if="equippedPurchaseIds.includes(purchase.id)" class="text-xs text-gray-500 italic" > (Equipped) </span>
                     
                 </div>
                 <button class=" text-gray-400 hover:text-gray-600 text-3xl" @click.stop="deletePurchasedWeapon(purchase)">&times;</button>
