@@ -32,12 +32,17 @@ const deleteEquipment = (equipment) => {
    })
 }
 
+const xpPercentage = computed(() => {
+  if (!hero || !hero.xp_required) return 0;
+  return Math.min(100, Math.round((hero.xp / hero.xp_required) * 100));
+});
+
 </script>
 
 <template>
   
-    <div v-if="hero" class="fixed inset-0 z-50 gap-4 flex items-center justify-center bg-black bg-opacity-50 " @click.self="$emit('close')">
-      <div class="bg-white max-h-100 rounded-2xl shadow-xl w-full max-w-sm relative ">
+    <div v-if="hero" class="fixed inset-0 z-50 flex justify-center bg-black bg-opacity-50 overflow-auto py-8 gap-x-4" @click.self="$emit('close')">
+      <div class="bg-white max-h-[90vh] overflow-auto rounded-2xl shadow-xl w-full max-w-lg relative">
         <button @click="$emit('close')" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
         <img v-if="hero.image_uri" :src="`/storage/${hero.image_uri}`" alt="Hero image" class="w-full  object-contain rounded-xl mb-0 mx-auto block" />
           <div class="p-8">
@@ -50,6 +55,17 @@ const deleteEquipment = (equipment) => {
                   <div v-if="hero.classrole" class="text-md"><b>Class Role:</b> {{ hero.classrole.classrole_name }}</div>
                   <div v-if="hero.faction" class="text-md"><b>Faction:</b> {{ hero.faction.name }}</div>
               </div>
+              <!-- Nivel y XP -->
+              <div class="text-center mb-4">
+                <div class="text-2xl font-bold text-indigo-600">Lvl {{ hero.level }}</div>
+                <div class="bg-gray-300 rounded h-2 w-full mt-1">
+                  <div
+                    class="bg-green-500 h-2 rounded"
+                    :style="{ width: (hero.xp_percentage ?? 0) + '%' }"
+                  ></div>
+                </div>
+                <div class="text-sm text-gray-500 mt-1">{{ hero.experience }} / 1000 XP</div>
+              </div>
 
               <div class="flex flex-col align-center justify-center bg-gray-200 p-2 pt-4 rounded-lg gap-2">
                   <!-- HP -->
@@ -58,8 +74,8 @@ const deleteEquipment = (equipment) => {
                           <span class="text-lg">💊 <b>HP:</b></span>
                           <span class="font-bold text-gray-700">{{ hero.hp }}</span>
                       </div>
-                      <div class="bg-gray-300 rounded h-3 w-full">
-                          <div class="bg-indigo-500 h-3 rounded" :style="{ width: (hero.hp / 10) + '%' }"></div>
+                      <div class="bg-gray-300  h-3 w-full">
+                          <div class="bg-indigo-500 h-3" :style="{ width: (hero.hp / 10) + '%' }"></div>
                       </div>
                   </div>
                   <!-- Strength -->
@@ -96,15 +112,15 @@ const deleteEquipment = (equipment) => {
                           <span class="text-lg">✨ <b>Ki:</b></span>
                           <span class="font-bold text-gray-700">{{ hero.ki }}</span>
                       </div>
-                      <div class="bg-gray-300 rounded h-3 w-full">
-                          <div class="bg-indigo-500 h-3 rounded" :style="{ width: (hero.ki / 10) + '%' }"></div>
+                      <div class="bg-gray-300 h-3 w-full">
+                          <div class="bg-indigo-500 h-3" :style="{ width: (hero.ki / 10) + '%' }"></div>
                       </div>
                   </div>
               </div>
           </div>
       </div>
       <div>
-      <div class="bg-gray-300 p-4 rounded-lg shadow-md mt-4">
+      <div class="bg-gray-300 p-4 rounded-lg shadow-md mt-4 max-w-lg w-[400px]">
         <h3 class="text-lg font-semibold mb-2">Weapons</h3>
         <ul class=" p-2">
           <li v-for="equipment in hero.equipments" :key="equipment.id" class="bg-white mb-1 border-gray-400 border-b pb-2 shadow-md rounded-lg"

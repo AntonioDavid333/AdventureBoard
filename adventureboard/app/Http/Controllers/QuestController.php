@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use App\Models\Heroe;
+use App\Models\Quest;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class QuestController extends Controller
 {
@@ -11,7 +16,13 @@ class QuestController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $heroes = $user->heroes()->get();
+        $quests = Quest::all();
+        return inertia ('Quests/Index', [
+            'heroes' => $heroes,
+            'quests' => $quests
+        ]);
     }
 
     /**
