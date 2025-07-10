@@ -17,11 +17,20 @@ class QuestController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $heroes = $user->heroes()->get();
-        $quests = Quest::all();
+        $purchases = $user->purchases()->get();
+        $heroes = $user->heroes()->with('equipments.purchase.weapon')->get();
+        $quests = Quest::with('user')->get();
+        $createdQuests = $user->quests()->with('user')->latest()->get();
+        $heroIds = $user->heroes()->pluck('id');
+        $joinedQuests = Quest::whereHas('heroes', function ($query) use ($heroIds) {
+        $query->whereIn('heroes.id', $heroIds);
+        })->with('user')->latest()->get();
         return inertia ('Quests/Index', [
+            'purchases' => $purchases,
             'heroes' => $heroes,
-            'quests' => $quests
+            'quests' => $quests,
+            'createdQuests' => $createdQuests,
+            'joinedQuests' => $joinedQuests
         ]);
     }
 

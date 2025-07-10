@@ -21,7 +21,7 @@ class Heroe extends Model
 
     public function quests()
     {
-        return $this->belongsToMany(Quest::class);
+        return $this->belongsToMany(Quest::class, 'heroe_quest', 'hero_id', 'quest_id');
     }
 
     public function race()

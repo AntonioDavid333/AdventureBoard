@@ -84,5 +84,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Purchase::class);
     }
+
+    public function quests()
+    {
+        return $this->hasMany(Quest::class);
+    }
     
 }

@@ -10,7 +10,7 @@ class Quest extends Model
 
     public function heroes()
     {
-        return $this->belongsToMany(Heroe::class);
+        return $this->belongsToMany(Heroe::class, 'heroe_quest', 'hero_id', 'quest_id');
     }
 
     public function user()
