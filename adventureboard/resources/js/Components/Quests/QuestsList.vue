@@ -3,7 +3,9 @@
 </script>
 
 <script setup>
-import { toRefs } from 'vue'
+import { toRefs } from 'vue';
+import { route } from 'ziggy-js';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
   quests: {
@@ -20,6 +22,10 @@ function formatDate(dateString) {
     year: 'numeric'
   }).format(date)
 }
+
+function questDetails(questId){
+  router.get(route('quests.show', questId))
+}
 </script>
 
 <template>
@@ -27,13 +33,14 @@ function formatDate(dateString) {
     <li
       v-for="quest in quests"
       :key="quest.id"
-      class="flex gap-6 justify-between items-center p-4 rounded-xl border border-gray-200 shadow-sm bg-white w-full"
+      @click="questDetails(quest.id)"
+      class="flex gap-6 justify-between items-center p-4 rounded-xl border border-gray-200 shadow-sm bg-white w-full hover:scale-105 cursor-pointer active:bg-gray-200"
     >
       <!-- Info básica -->
       <div class="w-1/3 space-y-1">
             <div class="flex gap-4">
                 <div class="text-sm text-gray-500 italic">{{ quest.user.name }}</div>
-                <div class="text-xs text-gray-400">{{ formatDate(quest.created_at) }}</div>
+                <div class="text-xs text-gray-500">{{ formatDate(quest.created_at) }}</div>
             </div>
         <div class="text-xl font-semibold text-gray-800">{{ quest.title }}</div>
       </div>

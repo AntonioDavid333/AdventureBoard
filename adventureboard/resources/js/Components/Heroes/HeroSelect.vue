@@ -6,6 +6,17 @@ export default {
 
 <script setup>
 import { ref, computed } from 'vue'
+import { onMounted } from 'vue'
+import { watch } from 'vue'
+
+// Para que siempre haya un heroe seleccionado por defecto
+/*onMounted(() => {
+  if (props.heroes.length > 0) {
+    emit('select-hero', props.heroes[0])
+  }
+})*/
+
+
 
 // Recibimos los héroes como propiedad desde la vista Quests
 const props = defineProps({
@@ -32,6 +43,11 @@ const prevHero = () => {
     currentIndex.value = (currentIndex.value - 1 + props.heroes.length) % props.heroes.length
   }
 }
+
+// Emitimos el nuevo héroe cuando cambia el índice
+watch(currentIndex, (newIndex) => {
+  emit('select-hero', props.heroes[newIndex])
+})
 
 const emit = defineEmits(['select-hero'])
 

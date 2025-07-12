@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Models\Heroe;
 use App\Models\Quest;
 use App\Models\User;
+use App\Models\Submission;
 use Illuminate\Support\Facades\Auth;
 
 class QuestController extends Controller
@@ -55,7 +56,31 @@ class QuestController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = Auth::user();
+        $quest = Quest::with('user')->findOrFail($id);
+        $submissions = Submission::with('heroe.user')->where('quest_id', $quest->id)->get();
+        
+        $isCreatedByUser = $quest->user_id === $user->id;
+        
+        $purchases = $user->purchases()->get();
+        $heroes = $user->heroes()->with('equipments.purchase.weapon')->get();
+        $quests = Quest::with('user')->get();
+        $createdQuests = $user->quests()->with('user')->latest()->get();
+        $heroIds = $user->heroes()->pluck('id');
+        $joinedQuests = Quest::whereHas('heroes', function ($query) use ($heroIds) {
+        $query->whereIn('heroes.id', $heroIds);
+        })->with('user')->latest()->get();
+
+        return inertia('Quests/QuestId', [
+            'quest' => $quest,
+            'purchases' => $purchases,
+            'heroes' => $heroes,
+            'quests' => $quests,
+            'createdQuests' => $createdQuests,
+            'joinedQuests' => $joinedQuests,
+            'isCreatedByUser' => $isCreatedByUser,
+            'submissions' => $submissions
+        ]);
     }
 
     /**

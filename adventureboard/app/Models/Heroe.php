@@ -21,7 +21,9 @@ class Heroe extends Model
 
     public function quests()
     {
-        return $this->belongsToMany(Quest::class, 'heroe_quest', 'hero_id', 'quest_id');
+        return $this->belongsToMany(Quest::class, 'submissions')
+        ->withPivot(['status', 'accepted_at', 'description'])
+        ->withTimestamps();
     }
 
     public function race()
@@ -42,5 +44,10 @@ class Heroe extends Model
     public function equipments()
     {
         return $this->hasMany(Equipment::class);
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class, 'heroe_id');
     }
 }

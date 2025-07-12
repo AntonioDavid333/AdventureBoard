@@ -11,17 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('heroe_quest', function (Blueprint $table) {
+        Schema::create('submissions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('hero_id');
+            $table->unsignedBigInteger('heroe_id');
             $table->unsignedBigInteger('quest_id');
             $table->enum('status',['pending','accepted','rejected'])->default('pending');
             $table->timestamp('accepted_at')->nullable();
             $table->timestamps();
+            $table->string('description', 600);
 
-            $table->foreign('hero_id')->references('id')->on('heroes')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('heroe_id')->references('id')->on('heroes')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('quest_id')->references('id')->on('quests')->onDelete('cascade')->onUpdate('cascade');
-            $table->unique(['hero_id','quest_id']);
+            $table->unique(['heroe_id','quest_id']);
 
 
         });
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('heroe_quest');
+        Schema::dropIfExists('submissions');
     }
 };
