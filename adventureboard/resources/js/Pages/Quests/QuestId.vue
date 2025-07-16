@@ -6,20 +6,10 @@ import { ref } from 'vue'
 import { router } from '@inertiajs/vue3'
 import { computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
+import SubmissionDetailModal from '@/Components/Submissions/SubmissionDetailModal.vue';
+
 
 const errors = usePage().props.errors
-
-
-const selectedHero = ref(null)
-const selectedWeapon = ref(null)
-const showSubmissionModal = ref(false)
-
-function openSubmissionModal() {
-  selectedHero.value = props.heroes.length > 0 ? props.heroes[0] : null;
-  showSubmissionModal.value = true;
-}
-
-const submissionDescription = ref('')
 
 const props = defineProps({
     quest: {
@@ -56,6 +46,17 @@ const props = defineProps({
     }
 
 })
+
+const selectedHero = ref(null)
+const selectedWeapon = ref(null)
+const showSubmissionModal = ref(false)
+
+function openSubmissionModal() {
+  selectedHero.value = props.heroes.length > 0 ? props.heroes[0] : null;
+  showSubmissionModal.value = true;
+}
+
+const submissionDescription = ref('')
 
 function formatDate(dateString) {
   const date = new Date(dateString)
@@ -116,12 +117,69 @@ const submitQuest = () => {
   })
 }
 
+const acceptSubmission = (submissionId) => {
+  const confirmed = confirm('Are you sure you want to accept this submission? All other submissions will be rejected.');
+
+  if (confirmed) {
+    router.put(`/submissions/${submissionId}/accept`, {}, {
+      preserveScroll: true,
+      onSuccess: () => {
+        
+      },
+      onError: (error) => {
+        alert('Error while accepting the submission');
+        console.error(error);
+      }
+    });
+  }
+};
+
+const denySubmission = (submissionId) => {
+  const confirmed = confirm('Are you sure you want to reject this submission?');
+
+  if (confirmed) {
+    router.put(`/submissions/${submissionId}/deny`, {}, {
+      preserveScroll: true,
+      onSuccess: () => {
+        
+      },
+      onError: (error) => {
+        alert('Error while rejecting the submission');
+        console.error(error);
+      }
+    });
+  }
+};
+
+
+
+const showSubmissionDetailModal = ref(false)
+const selectedSubmissionDetail = ref(null)
+
+function openSubmissionDetail(submission) {
+    console.log('Opening modal with submission:', submission)
+  selectedSubmissionDetail.value = submission
+  showSubmissionDetailModal.value = true
+}
+
+
 </script>
 <template>
 <AppLayout>
     <template #header>
         <h1 class="font-semibold text-xl text-gray-800 leading-tight">{{ props.quest.title }}</h1> 
     </template>
+
+    <SubmissionDetailModal
+    v-if="showSubmissionDetailModal && selectedSubmissionDetail"
+    :submission="selectedSubmissionDetail"
+    :isCreatedByUser="isCreatedByUser"
+    @close="showSubmissionDetailModal = false"
+    @accept="acceptSubmission"
+    @deny="denySubmission"
+    />
+
+
 
     <div class="py-12 ">
                 <div class="max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
@@ -171,24 +229,67 @@ const submitQuest = () => {
                                 </div>
                             </div>
                             <div class="p-6 bg-white border-b border-gray-200 text-lg font-semibold text-gray-400">
-                                <ul>
-                                    <h3 class="font-semibold text-xl text-gray-800 mb-4">Submissions</h3>
-                                    <li v-for="submission in submissions" :key="submission.id" class="flex gap-2 border border-gray-300 shadow-md rounded-lg p-4 hover:scale-105 ">
-                                        <div class="font-semibold text-gray-800">
-                                            {{ submission.heroe.name }}
-                                        </div>
-                                        <div>
-                                            {{ submission.status }}
+                                <h3 class="font-semibold text-xl text-gray-800 mb-4">Submissions</h3>
+                                <ul class="space-y-4">
+                                    <li
+                                    v-for="submission in submissions"
+                                    @click="openSubmissionDetail(submission)"
+                                    :key="submission.id"
+                                    :class="[
+                                    'flex items-center gap-4 border shadow-md rounded-xl p-4 hover:scale-[1.02] transition-transform',
+                                    submission.status === 'accepted' ? 'bg-green-100 border-green-300' : '',
+                                    submission.status === 'rejected' ? 'bg-red-100 border-red-300' : '',
+                                    submission.status === 'pending' ? 'bg-white border-gray-300' : ''
+                                    ]"
+                                    >
+                                    <!-- Imagen del héroe -->
+                                    <img
+                                        class="w-16 h-16 object-cover rounded-md"
+                                        :src="`/storage/${submission.heroe.image_uri}`"
+                                        alt="Heroe"
+                                    />
+
+                                    <!-- Información del héroe -->
+                                    <div class=" flex justify-between flex-1 px-4">
+                                        <div class="text-gray-900 font-semibold text-lg">
+                                        {{ submission.heroe.name }}
                                         </div>
 
+                                        <!-- Descripción truncada -->
+                                        <p class="text-gray-600 text-sm line-clamp-2 max-w-full justify-center items-center">
+                                        {{ submission.description }}
+                                        </p>
+
+                                        <!-- Estado opcional -->
+                                        <div class="text-sm text-gray-500 mt-1 bg-gray-200 px-2 rounded-xl py-4">
+                                        {{ submission.status }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Botones -->
+                                    <div v-if="isCreatedByUser && submission.status === 'pending'"   class="flex gap-2 items-center justify-center ml-4" @click.stop>
+                                        <button
+                                        @click="acceptSubmission(submission.id)"
+                                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-md text-sm transition"
+                                        >
+                                        Acept
+                                        </button>
+                                        <button
+                                        @click="denySubmission(submission.id)"
+                                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded-md text-sm transition"
+                                        >
+                                        Deny
+                                        </button>
+                                    </div>
                                     </li>
-                                </ul>
-                            </div>
+                                </ul> 
+                                </div>
                         </div>
                     </div>
                 </div>
     </div>
 </AppLayout>
+
 <div v-if="showSubmissionModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
     <div v-if="errors.submission" class="text-red-500">
         {{ errors.submission }}

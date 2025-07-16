@@ -31,6 +31,7 @@ const submit = () => {
 
 <template>
     <Head title="Log in" />
+    <img id="background" class="fixed top-0 left-0 w-full h-full object-cover z-[-1]" src="/images/background.jpg" alt="background"/>
 
     <AuthenticationCard>
         <template #logo>
@@ -40,6 +41,7 @@ const submit = () => {
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
         </div>
+        
 
         <form @submit.prevent="submit">
             <div>

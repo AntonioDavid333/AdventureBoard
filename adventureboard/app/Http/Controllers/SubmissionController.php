@@ -55,6 +55,59 @@ class SubmissionController extends Controller
     }
 
     /**
+     * Accept and deny submissions
+     */
+    public function accept($id)
+    {
+        $submission = Submission::with('heroe.user', 'quest')->findOrFail($id);
+
+        $submission->status = 'accepted';
+        $submission->save();
+
+        Submission::where('quest_id', $submission->quest_id)
+            ->where('id', '!=', $submission->id)
+            ->update(['status' => 'rejected']);
+
+        $hero = $submission->heroe;
+        $user = $hero->user;
+        $quest = $submission->quest;
+
+        
+        $user->coins += $quest->reguard;
+        $user->save();
+
+        
+        $hero->strength += rand(1, 10);
+        $hero->defense += rand(1, 10);
+        $hero->ki += rand(1, 10);
+        $hero->experience += rand(10, 25); 
+
+    
+        while ($hero->experience >= 100) {
+            $hero->level += 1;
+            $hero->experience -= 100;
+        }
+
+        $hero->save();
+
+        return redirect()->back()->with('success', 'Submission accepted and others denied.');
+    }
+
+    /**
+     * Denies submissions
+     */
+
+    public function deny($id)
+    {
+         $submission = Submission::findOrFail($id); 
+        $submission->status = 'rejected';
+        $submission->save();
+
+        return redirect()->back()->with('success', 'Submission denied.');
+    }
+
+
+    /**
      * Display the specified resource.
      */
     public function show(string $id)

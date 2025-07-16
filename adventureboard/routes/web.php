@@ -21,6 +21,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::resource('purchases', PurchaseController::class);
     Route::post('/heroes/attach', [HeroeController::class, 'attach'])->name('heroe.attach');
     Route::resource('equipments', EquipmentController::class);
+    
+    Route::put('/submissions/{submission}/accept', [SubmissionController::class, 'accept'])->name('submissions.accept');
+    Route::put('/submissions/{submission}/deny', [SubmissionController::class, 'deny'])->name('submissions.deny');
     Route::post('/submissions', [SubmissionController::class, 'store'])->name('submissions.store');
 
 });

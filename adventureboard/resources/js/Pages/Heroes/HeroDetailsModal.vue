@@ -33,7 +33,7 @@ const deleteEquipment = (equipment) => {
 }
 
 const xpPercentage = computed(() => {
-  if (!hero || !hero.xp_required) return 0;
+  if (!hero || !hero.experience) return 0;
   return Math.min(100, Math.round((hero.xp / hero.xp_required) * 100));
 });
 
@@ -61,7 +61,7 @@ const xpPercentage = computed(() => {
                 <div class="bg-gray-300 rounded h-2 w-full mt-1">
                   <div
                     class="bg-green-500 h-2 rounded"
-                    :style="{ width: (hero.xp_percentage ?? 0) + '%' }"
+                    :style="{ width: (hero.experience ?? 0) + '%' }"
                   ></div>
                 </div>
                 <div class="text-sm text-gray-500 mt-1">{{ hero.experience }} / 1000 XP</div>
