@@ -9,6 +9,7 @@ import HeroDetailsModal from '../Heroes/HeroDetailsModal.vue';
 import { ref } from 'vue';
 import WeaponDetailsModal from '../Weapons/WeaponDetailsModal.vue';
 import QuestsList from '@/Components/Quests/QuestsList.vue';
+import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     quests: {
@@ -67,10 +68,17 @@ function formatDate(dateString) {
         <div class="py-12 ">
                 <div class="max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
                     <div class="flex gap-8">
-                        <div class="w-1/4">
+                        <div class="w-1/4" v-if="Object.keys(heroes).length > 0">
                             <HeroSelect :heroes="heroes" @select-hero="selectedHero = $event" @select-weapon="selectedWeapon = $event" />
                         </div>
                         <div class="flex-1">
+                            <div class="p-6 bg-white border-b border-gray-200">
+                                <div class="flex gap-4">
+                                    <Link class="inline-block px-4 py-2 bg-green-600 text-white font-semibold rounded hover:bg-green-700 transition" :href="route('quests.create')">
+                                        New Quest
+                                    </Link>
+                                </div>
+                            </div>
                             <div class="bg-white py-8 sm:py-12">
                                 <div class="mx-auto w-full px-6 lg:px-8">
                                     <div class="w-full">

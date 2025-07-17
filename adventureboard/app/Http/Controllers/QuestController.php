@@ -9,6 +9,7 @@ use App\Models\Quest;
 use App\Models\User;
 use App\Models\Submission;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\QuestRequest;
 
 class QuestController extends Controller
 {
@@ -40,17 +41,56 @@ class QuestController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Quests/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(QuestRequest $request)
     {
-        //
-    }
+        $user = Auth::user();
+        $validated = $request->validated();
 
+
+         if ($user->coins < $validated['reguard']) {
+
+            return redirect()->back()->withErrors(['coins' => 'No tienes suficientes monedas para crear esta quest.']);
+        }
+        
+        $difficulty = match (true) {
+            $validated['reguard'] < 20 => 'easy',
+            $validated['reguard'] < 200 => 'medium',
+            default => 'hard',
+        };
+
+        
+        if ($request->hasFile('image_uri')) {
+            $path = $request->file('image_uri')->store('quests', 'public');
+            $validated['image_uri'] = $path;
+        } else {
+            $validated['image_uri'] = 'Quests_images/default.jpg';
+        }
+
+        $user->coins -= $validated['reguard'];
+        $user->save();
+
+        
+        Quest::create([
+            'user_id' => Auth::id(),
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'strength_required' => $validated['strength_required'] ?? 20,
+            'defense_required' => $validated['defense_required'] ?? 20,
+            'ki_required' => $validated['ki_required'] ?? 20,
+            'reguard' => $validated['reguard'],
+            'image_uri' => $validated['image_uri'] ?? null,
+            'difficulty' => $difficulty,
+            'status' => 'open'
+        ]);
+
+        return redirect()->route('quests.index')->with('success', 'Quest created successfully!');
+    }
     /**
      * Display the specified resource.
      */

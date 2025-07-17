@@ -7,6 +7,10 @@ import { router } from '@inertiajs/vue3'
 import { computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import SubmissionDetailModal from '@/Components/Submissions/SubmissionDetailModal.vue';
+import { route } from 'ziggy-js'
+
+//import { route } from 'ziggy-js'
+
 
 
 const errors = usePage().props.errors
@@ -162,6 +166,22 @@ function openSubmissionDetail(submission) {
   showSubmissionDetailModal.value = true
 }
 
+function confirmDeleteQuest() {
+  if (confirm('¿Sure you want to delete this quest?.')) {
+    router.delete(`/quests/${props.quest.id}`, {
+      preserveScroll: true,
+      onSuccess: () => {
+        alert('Quest deleted.')
+        router.visit('quests.index') 
+      },
+      onError: (error) => {
+        alert('Error on deleting quest')
+        console.error(error)
+      }
+    })
+  }
+}
+
 
 </script>
 <template>
@@ -193,8 +213,23 @@ function openSubmissionDetail(submission) {
                                 <div>{{ formatDate(props.quest.created_at) }}</div>
                             </div>
                             <img class="w-full h-50 object-cover" :src="`/storage/${quest.image_uri}`" alt="Quest image" />
-                            <div class="p-6 bg-white border-b border-gray-200 text-2xl font-bold text-gray-800">
+                            <div class="flex p-6 bg-white border-b border-gray-200 text-2xl font-bold text-gray-800 justify-between">
                                 {{ props.quest.title }}
+                                <div v-if="isCreatedByUser" class="flex gap-4 mb-4">
+                                  <button
+                                    @click="confirmDeleteQuest"
+                                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm"
+                                  >
+                                    Delete
+                                  </button>
+
+                                  <button
+                                    @click="() => router.get(route('quests.create'), { updating: true })"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
+                                  >
+                                    Edit
+                                  </button>
+                                </div>
                             </div>
                             <div class="p-6 bg-white border-b border-gray-200 text-lg font-semibold text-gray-400">
                                 {{ props.quest.description }}
