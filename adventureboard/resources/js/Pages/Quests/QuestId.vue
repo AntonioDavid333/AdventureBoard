@@ -166,20 +166,14 @@ function openSubmissionDetail(submission) {
   showSubmissionDetailModal.value = true
 }
 
-function confirmDeleteQuest() {
-  if (confirm('¿Sure you want to delete this quest?.')) {
-    router.delete(`/quests/${props.quest.id}`, {
-      preserveScroll: true,
-      onSuccess: () => {
-        alert('Quest deleted.')
-        router.visit('quests.index') 
-      },
-      onError: (error) => {
-        alert('Error on deleting quest')
-        console.error(error)
-      }
-    })
-  }
+const editQuest = (id) => {
+  router.get(route('quests.edit', id))
+}
+
+const deleteQuest = (id) => {
+    if (confirm('Are you sure you want to delete this weapon?')) {
+        router.delete(route('quests.destroy', id))
+    }
 }
 
 
@@ -217,14 +211,14 @@ function confirmDeleteQuest() {
                                 {{ props.quest.title }}
                                 <div v-if="isCreatedByUser" class="flex gap-4 mb-4">
                                   <button
-                                    @click="confirmDeleteQuest"
+                                    @click="deleteQuest(props.quest.id)"
                                     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm"
                                   >
                                     Delete
                                   </button>
 
                                   <button
-                                    @click="() => router.get(route('quests.create'), { updating: true })"
+                                    @click.stop="editQuest(props.quest.id)"
                                     class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
                                   >
                                     Edit
@@ -290,7 +284,7 @@ function confirmDeleteQuest() {
                                         {{ submission.heroe.name }}
                                         </div>
 
-                                        <!-- Descripción truncada -->
+                                        <!-- Descripción -->
                                         <p class="text-gray-600 text-sm line-clamp-2 max-w-full justify-center items-center">
                                         {{ submission.description }}
                                         </p>

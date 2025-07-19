@@ -28,7 +28,16 @@ class QuestRequest extends FormRequest
             'defense_required' => 'nullable|integer|min:0',
             'ki_required' => 'nullable|integer|min:0',
             'reguard' => 'required|integer|min:0',
-            'image_uri' => 'nullable|image|max:2048',
+            //'image_uri' => 'nullable|image|max:2048',
         ];
+
+        if ($this->isMethod('post')) {
+            // Crear: se espera una imagen
+            $rules['image_uri'] = 'nullable|image|max:2048';
+        } elseif ($this->isMethod('put') || $this->isMethod('patch')) {
+            // Editar: puede ser imagen o string
+            $rules['image_uri'] = 'nullable';
+        }
+        return $rules;
     }
 }

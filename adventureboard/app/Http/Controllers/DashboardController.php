@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Quest;
 
 class DashboardController extends Controller
 {
@@ -31,6 +32,14 @@ class DashboardController extends Controller
         $purchases = $user->purchases()->with('weapon')->get() ?? collect();
         $heroes = $user->heroes()->with('equipments.purchase.weapon')->get();
 
+        $quests = Quest::with('user')->orderBy('created_at', 'desc')->get();
+        $createdQuests = $user->quests()->with('user')->latest()->get();
+        $heroIds = $user->heroes()->pluck('id');
+        $joinedQuests = Quest::whereHas('heroes', function ($query) use ($heroIds) {
+        $query->whereIn('heroes.id', $heroIds);
+        })->with('user')->latest()->get();
+
+
         return Inertia::render('Dashboard/Index', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
@@ -39,7 +48,10 @@ class DashboardController extends Controller
             //'purchasedWeapons' => $purchasedWeapons,
             'weapons' => $weapons,
             'purchases' => $purchases,
-            'heroes' => $heroes
+            'heroes' => $heroes,
+            'quests' => $quests,
+            'createdQuests' => $createdQuests,
+            'joinedQuests' => $joinedQuests
         ]);
         }
 }

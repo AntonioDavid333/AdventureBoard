@@ -59,9 +59,10 @@ const logout = () => {
                                     Heroes
                                 </NavLink>
                             </div>
+
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('purchases.index')" :active="route().current('purchases.*')">
-                                    Purchases
+                                <NavLink :href="route('quests.index')" :active="route().current('quests.*')">
+                                    Quests
                                 </NavLink>
                             </div>
                             
@@ -70,11 +71,7 @@ const logout = () => {
                                     Weapons
                                 </NavLink>
                             </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('quests.index')" :active="route().current('quests.*')">
-                                    Quests
-                                </NavLink>
-                            </div>
+                            
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">

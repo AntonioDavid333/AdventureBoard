@@ -21,7 +21,7 @@ class QuestController extends Controller
         $user = Auth::user();
         $purchases = $user->purchases()->get();
         $heroes = $user->heroes()->with('equipments.purchase.weapon')->get();
-        $quests = Quest::with('user')->get();
+        $quests = Quest::with('user')->orderBy('created_at', 'desc')->get();
         $createdQuests = $user->quests()->with('user')->latest()->get();
         $heroIds = $user->heroes()->pluck('id');
         $joinedQuests = Quest::whereHas('heroes', function ($query) use ($heroIds) {
@@ -128,15 +128,18 @@ class QuestController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $quest = Quest::findOrFail($id);
+        return inertia('Quests/Edit', ['quest' => $quest]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(QuestRequest $request, string $id)
     {
-        //
+        $quest = Quest::findOrFail($id);
+        $quest->update($request->validated());
+        return redirect()->route('quests.index');
     }
 
     /**
@@ -144,6 +147,12 @@ class QuestController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = Auth::user();
+        $quest = Quest::findOrFail($id);
+
+        $quest->delete();
+
+        return redirect()->route('quests.index')->with('success', 'Quest deleted succesfuly.');
     }
+
 }
